@@ -42,4 +42,9 @@ public class LLTest {
     public void testFilter() {
         assertEquals(LL.of(2,4,6,8), list.filter(x->x%2==0));
     }
+
+    @Test
+    public void testMap() {
+        assertEquals(LL.of(1,4,9,16,25,36,49,64,81), list.map(x->x*x));
+    }
 }

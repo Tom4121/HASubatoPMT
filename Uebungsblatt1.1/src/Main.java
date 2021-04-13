@@ -23,6 +23,8 @@ public class Main {
         System.out.println(LL.of(1,2,3,4,5,6,7,8,9,10).dropWhile(z->z<6));
         System.out.println(LL.of(1,2,3,4,5,6,7,8,9,10).takeWhile(z->z<8));
         System.out.println(LL.of(1,2,3,4,5).filter(z->z%2==1));
+        System.out.println(LL.of(1,2,3,4,5,6,7,8,9,10).map(z->z*z));
+        System.out.println(LL.of(1,2,3,4,5).zip(LL.of("A","B","C","D")));
     }
 
 }

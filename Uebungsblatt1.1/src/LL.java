@@ -217,13 +217,18 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
     default LL<E> filter(Predicate<? super E> p) {
         if (this instanceof Cons){
-
+            if (p.test(head()))return cons(head(),tail().filter(p));
+            else return tail().filter(p);
         }
+        return nil();
     }
 
 
     default <R> LL<R> map(Function<? super E, ? extends R> f) {
-        return nil();    /*ToDo*/
+        if (this instanceof Cons){
+            return cons(f.apply(head()),tail().map(f));
+        }
+        return nil();
     }
 
 
@@ -236,11 +241,15 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default <B> LL<Pair<E, B>> zip(LL<B> that) {
+        if (this instanceof Cons && that instanceof Cons){
+            return cons(new Pair(head(),that.head()),tail().zip(that.tail()));
+        }
         return nil();   /*ToDo*/
     }
 
 
     default Pair<LL<E>, LL<E>> span(Predicate<? super E> p) {
+
         return new Pair<>(nil(), nil());   /*ToDo*/
     }
 

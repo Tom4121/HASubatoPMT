@@ -105,7 +105,7 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
     default LL<E> take(int i) {
         if (i > length()) return this;
         if (i <= 0) return nil();
-        return cons(head(),tail().take(i-1));
+        return cons(head(), tail().take(i - 1));
     }
 
 
@@ -118,21 +118,21 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
         return reverse1(nil());
     }
 
-    default LL<E> reverse1(LL<E> element){
-        if (tail().isEmpty()) return cons(head(),element);
-        return tail().reverse1(cons(head(),element));
+    default LL<E> reverse1(LL<E> element) {
+        if (tail().isEmpty()) return cons(head(), element);
+        return tail().reverse1(cons(head(), element));
     }
 
 
     default LL<E> intersperse(E e) {
-        if (this.tail() instanceof Cons)return new Cons<E>(head(),cons(e,tail().intersperse(e)));
-        return cons(head(),tail());
+        if (this.tail() instanceof Cons) return new Cons<E>(head(), cons(e, tail().intersperse(e)));
+        return cons(head(), tail());
     }
 
 
     default boolean isPrefixOf(LL<E> that) {
-        if (isEmpty())return true;
-        if(this.length()> that.length())return false;
+        if (isEmpty()) return true;
+        if (this.length() > that.length()) return false;
         if (tail() instanceof Cons) {
             if (this.head().equals(that.head())) return this.tail().isPrefixOf(that.tail());
             return false;
@@ -148,16 +148,16 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
     default boolean isInfixOf(LL<E> that) {
         //return that.tail().isPrefixOf(this);
-        if(this.length()> that.length())return false;
-        if(!isPrefixOf(that)) return this.isInfixOf(that.tail());
+        if (this.length() > that.length()) return false;
+        if (!isPrefixOf(that)) return this.isInfixOf(that.tail());
         return true;
     }
 
 
     default E get(int i) {
         //if (i>length())new IndexOutOfBoundsException();
-        if (i==0)return head();
-        return tail().get(i-1);
+        if (i == 0) return head();
+        return tail().get(i - 1);
     }
 
 
@@ -167,13 +167,13 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default LL<LL<E>> tails() {
-        if (isEmpty())return cons(nil(),nil());
-        return cons(this,tail().tails());   /*ToDo*/
+        if (isEmpty()) return cons(nil(), nil());
+        return cons(this, tail().tails());   /*ToDo*/
     }
 
 
     default void forEach(Consumer<? super E> con) {
-        if (this instanceof Cons){
+        if (this instanceof Cons) {
             con.accept(head());
             tail().forEach(con);
         }
@@ -190,7 +190,7 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default boolean contains(E el) {
-        return this.containsWith(x->x.equals(el));
+        return this.containsWith(x -> x.equals(el));
     }
 
 
@@ -216,8 +216,8 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default LL<E> filter(Predicate<? super E> p) {
-        if (this instanceof Cons){
-            if (p.test(head()))return cons(head(),tail().filter(p));
+        if (this instanceof Cons) {
+            if (p.test(head())) return cons(head(), tail().filter(p));
             else return tail().filter(p);
         }
         return nil();
@@ -225,8 +225,8 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default <R> LL<R> map(Function<? super E, ? extends R> f) {
-        if (this instanceof Cons){
-            return cons(f.apply(head()),tail().map(f));
+        if (this instanceof Cons) {
+            return cons(f.apply(head()), tail().map(f));
         }
         return nil();
     }
@@ -241,31 +241,36 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default <B> LL<Pair<E, B>> zip(LL<B> that) {
-        if (this instanceof Cons && that instanceof Cons){
-            return cons(new Pair(head(),that.head()),tail().zip(that.tail()));
+        if (this instanceof Cons && that instanceof Cons) {
+            return cons(new Pair(head(), that.head()), tail().zip(that.tail()));
         }
-        return nil();   /*ToDo*/
+        return nil();
     }
 
 
     default Pair<LL<E>, LL<E>> span(Predicate<? super E> p) {
-
-        return new Pair<>(nil(), nil());   /*ToDo*/
+        return new Pair<>(this.takeWhile(p), this.dropWhile(p));
     }
 
 
     default Pair<LL<E>, LL<E>> partition(Predicate<? super E> p) {
-        return new Pair<>(nil(), nil());   /*ToDo*/
+        return new Pair<>(this.filter(p),this.filter(Predicate.not(p)));
     }
 
 
     default boolean isSorted(Comparator<? super E> cmp) {
-        return false;   /*ToDo*/
+        if (!tail().isEmpty()){
+            if (cmp.compare(head(),tail().head())<0)return tail().isSorted(cmp);
+            else if (cmp.compare(head(),tail().head())==0)return tail().isSorted(cmp);
+            else return false;
+        }else {return true;}
     }
 
 
-    default LL<E> qsort(Comparator<? super E> cmp) {
-        return nil();     /*ToDo*/
+    default LL<E> qsort(Comparator<? super E> cmp) {//partition
+        if (length()<=1)return this;
+        var temp = this.tail().partition(x->cmp.compare(x,head())<=0);
+        return temp.fst.qsort(cmp).append(of(head())).append(temp.snd.qsort(cmp));
     }
 
 

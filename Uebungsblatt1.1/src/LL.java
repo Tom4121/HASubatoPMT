@@ -115,6 +115,7 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default LL<E> reverse() {
+        if (isEmpty()) return nil();
         return reverse1(nil());
     }
 
@@ -125,6 +126,7 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default LL<E> intersperse(E e) {
+        if (isEmpty()) return nil();
         if (this.tail() instanceof Cons) return new Cons<E>(head(), cons(e, tail().intersperse(e)));
         return cons(head(), tail());
     }
@@ -142,6 +144,8 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default boolean isSuffixOf(LL<E> that) {
+        if (isEmpty()) return true;
+        if (length() > that.length()) return false;
         return this.reverse().isPrefixOf(that.reverse());
     }
 
@@ -155,8 +159,8 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default E get(int i) {
-        //if (i>length())new IndexOutOfBoundsException();
-        if (i == 0) return head();
+        if (i > length() || i < length()) new IndexOutOfBoundsException();
+        if (i <= 0) return head();
         return tail().get(i - 1);
     }
 
@@ -168,7 +172,7 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
     default LL<LL<E>> tails() {
         if (isEmpty()) return cons(nil(), nil());
-        return cons(this, tail().tails());   /*ToDo*/
+        return cons(this, tail().tails());
     }
 
 
@@ -210,8 +214,6 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
             }
         }
         return nil();
-
-
     }
 
 
@@ -254,22 +256,25 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default Pair<LL<E>, LL<E>> partition(Predicate<? super E> p) {
-        return new Pair<>(this.filter(p),this.filter(Predicate.not(p)));
+        return new Pair<>(this.filter(p), this.filter(Predicate.not(p)));
     }
 
 
     default boolean isSorted(Comparator<? super E> cmp) {
-        if (!tail().isEmpty()){
-            if (cmp.compare(head(),tail().head())<0)return tail().isSorted(cmp);
-            else if (cmp.compare(head(),tail().head())==0)return tail().isSorted(cmp);
+        if (isEmpty()) return true;
+        if (!tail().isEmpty()) {
+            if (cmp.compare(head(), tail().head()) < 0) return tail().isSorted(cmp);
+            else if (cmp.compare(head(), tail().head()) == 0) return tail().isSorted(cmp);
             else return false;
-        }else {return true;}
+        } else {
+            return true;
+        }
     }
 
 
     default LL<E> qsort(Comparator<? super E> cmp) {//partition
-        if (length()<=1)return this;
-        var temp = this.tail().partition(x->cmp.compare(x,head())<=0);
+        if (length() <= 1) return this;
+        var temp = this.tail().partition(x -> cmp.compare(x, head()) <= 0);
         return temp.fst.qsort(cmp).append(of(head())).append(temp.snd.qsort(cmp));
     }
 

@@ -159,7 +159,7 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default E get(int i) {
-        if (i > length() || i < length()) new IndexOutOfBoundsException();
+        if (i > length() || i < 0) throw new IndexOutOfBoundsException();
         if (i <= 0) return head();
         return tail().get(i - 1);
     }
@@ -214,6 +214,8 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
             }
         }
         return nil();
+
+
     }
 
 

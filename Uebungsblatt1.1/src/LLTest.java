@@ -8,10 +8,12 @@ import static org.junit.jupiter.api.Assertions.*;
 public class LLTest {
     LL<Integer> list;
     LL<Integer> list2;
+    LL<Integer> list3;
     @Before
     public void init() {
         list = LL.of(1,2,3,4,5,6,7,8,9);
         list2 = LL.of(10,11,12,13,14,15);
+        list3 = LL.of();
     }
     @Test
     public void testLength() {
@@ -21,6 +23,7 @@ public class LLTest {
     @Test
     public void testLast() {
         assertEquals(list.last(), 9);
+        assertEquals(list3.last(),null);
     }
 
     @Test

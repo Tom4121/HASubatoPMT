@@ -81,6 +81,7 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default E last() {
+        if (isEmpty())return null;
         if (tail().isEmpty()) return head();
         return tail().last();
     }
@@ -115,14 +116,11 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default LL<E> reverse() {
-        if (isEmpty()) return nil();
-        return reverse1(nil());
+        if (isEmpty())return nil();
+        return tail().reverse().append(cons(head(),nil()));
     }
 
-    default LL<E> reverse1(LL<E> element) {
-        if (tail().isEmpty()) return cons(head(), element);
-        return tail().reverse1(cons(head(), element));
-    }
+
 
 
     default LL<E> intersperse(E e) {

@@ -149,7 +149,6 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default boolean isInfixOf(LL<E> that) {
-        //return that.tail().isPrefixOf(this);
         if (this.length() > that.length()) return false;
         if (!isPrefixOf(that)) return this.isInfixOf(that.tail());
         return true;

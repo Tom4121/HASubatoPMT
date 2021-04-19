@@ -178,13 +178,13 @@ public class AL<E>  {
 
 
     public AL<E> intersperse(E e){
+        if (isEmpty())return nil();
         AL<E> temp = nil();
         temp.add(get(0));
         for (int i = 1; i < length(); i++) {
             temp.add(e);
             temp.add(get(i));
         }
-
         return temp;
     }
 

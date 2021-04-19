@@ -12,8 +12,8 @@ public class Main {
 //        System.out.println(LL.of(1,2,3,4,5,6).intersperse(42));
 //        System.out.println(LL.of(7,8,9).isPrefixOf(LL.of(1,2,3,4,5,6,7,8,9)));
 //        System.out.println(LL.of(8,8,8,9).isSuffixOf(LL.of(1,2,3,4,5,6,7,8,8,9)));
-//        System.out.println(LL.of(6,7,8,9).isInfixOf(LL.of(1,2,3,4,5,6,7,8)));
-          System.out.println(LL.of(1,2,3,4,5,6,7,8,9).reverse());
+        System.out.println(LL.of().isInfixOf(LL.of(1,2,3,4,5,6,7,8)));
+//          System.out.println(LL.of(1,2,3,4,5,6,7,8,9).reverse());
 //        System.out.println(LL.of(1,2,3,4,5,6).get(3));
 //        System.out.println(LL.of(1,2,3,4,5,6).rotate());
 //        System.out.println(LL.of(1,2,3,4,5,6).tails());

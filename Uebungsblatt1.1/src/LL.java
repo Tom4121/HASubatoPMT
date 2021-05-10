@@ -81,7 +81,6 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default E last() {
-        if (isEmpty())return null;
         if (tail().isEmpty()) return head();
         return tail().last();
     }
@@ -120,12 +119,9 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
         return tail().reverse().append(cons(head(),nil()));
     }
 
-
-
-
     default LL<E> intersperse(E e) {
         if (isEmpty()) return nil();
-        if (this.tail() instanceof Cons) return new Cons<E>(head(), cons(e, tail().intersperse(e)));
+        if (this.tail() instanceof Cons) return cons(head(), cons(e, tail().intersperse(e)));
         return cons(head(), tail());
     }
 
@@ -156,7 +152,7 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default E get(int i) {
-        if (i > length() || i < 0) throw new IndexOutOfBoundsException();
+        if (isEmpty() || i < 0) throw new IndexOutOfBoundsException();
         if (i <= 0) return head();
         return tail().get(i - 1);
     }
@@ -168,12 +164,13 @@ public sealed interface LL<E> permits LL.Nil, LL.Cons {
 
 
     default LL<LL<E>> tails() {
-        if (isEmpty()) return cons(nil(), nil());
+        if (isEmpty()) return of(nil());
         return cons(this, tail().tails());
     }
 
 
     default void forEach(Consumer<? super E> con) {
+        if (isEmpty())return ;
         if (this instanceof Cons) {
             con.accept(head());
             tail().forEach(con);

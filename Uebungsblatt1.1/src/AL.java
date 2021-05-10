@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -8,7 +9,6 @@ import java.util.Comparator;
 
 
 public class AL<E>  {
-
 
 
     private int size = 0;

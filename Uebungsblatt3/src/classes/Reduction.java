@@ -104,7 +104,7 @@ public class Reduction {
 
 
   public static long maximum(Iterable<Long> xs) {
-    return fold(xs, 0L, (result, x) -> x > result ? x : result);
+    return fold(xs, Long.MIN_VALUE, (result, x) -> x > result ? x : result);
   }
 
 
